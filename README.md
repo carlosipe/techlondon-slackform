@@ -4,7 +4,8 @@ Based on Lucas J. Gordon's [SlackForm](https://github.com/lucasjgordon/SlackForm
 
 # Setup
 
-Copy the .env-sample file to .env and fill in the Typeform and Slack config parameters.
+* Copy the .env-sample file to .env and fill in the Typeform and Slack config parameters.
+* Run `npm install` to install the dependencies
 
 # Obtaining the configuration parameters
 
@@ -21,7 +22,7 @@ Load it, and in the questions array find the form entry that asks for the user's
 
 # Sending the actual invites
 
-Simply set up a cronjob that runs 'node invite.js' on a regular basis.
+Simply set up a cronjob that runs `node invite.js` on a regular basis.
 
 # TODO
 

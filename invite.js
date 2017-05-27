@@ -1,4 +1,4 @@
-var SlackForm = require('./SlackForm.js');
+var SlackForm = require('./slackform.js');
 require('dotenv').config()
 
 var slackForm = new SlackForm({
