@@ -1,8 +1,7 @@
-var request = require('request');
+var request = require('request'),
+    Q       = require('q');
 
-var Q = require('q');
-
-function invite (channel, email, token) {
+function invite (channel, email, token, channels) {
 	var d = Q.defer();
 
 	request({
@@ -15,6 +14,7 @@ function invite (channel, email, token) {
 			email: email,
 			token: token,
 			set_active: true,
+      channels: channels,
 			_attempts: 1
 		}
 	}, function (error, response, body) {
@@ -36,6 +36,7 @@ var SlackForm = function (config) {
 	this.typeformEmail = config.typeformEmail;
 	this.slackChannel = config.slackChannel;
 	this.slackToken = config.slackToken;
+	this.channels = config.channels;
 }
 
 SlackForm.prototype.invite = function (callback) {
@@ -59,7 +60,7 @@ SlackForm.prototype.invite = function (callback) {
 		}
 
 		Q.all(data.responses.map(function (response) {
-			return invite(that.slackChannel, response.answers[that.typeformEmail], that.slackToken);
+			return invite(that.slackChannel, response.answers[that.typeformEmail], that.slackToken, that.channels);
 		})).then(function (data) {
 			callback(null, data);
 		});
