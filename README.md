@@ -1,44 +1,28 @@
-# SlackForm by lucasjgordon
-SlackForm is a node module that will allow you to automatically invite new Typeform submissions to your Slack community.
+# Tech London's automatic Slack inviter
 
-## Basic Usage
-Add SlackForm.js to your project, run npm install. Include the module using:
+Based on Lucas J. Gordon's [SlackForm](https://github.com/lucasjgordon/SlackForm) code, for the [Tech London](http://techlondon.io) Slack community. This looks through Typeform signups (within the last hour) and issues an invite via the Slack API.
 
-````javascript
-var SlackForm = require('./SlackForm.js');
-````
+# Setup
 
-Now you need to get your keys. You'll need you [Typeform API Key](https://admin.typeform.com/account) and the name of your Slack group as it is shown in the group's url. Create a new Slack token [here](https://api.slack.com/web). You'll need your Typeform ID, which can be obtained from the URL of the actual form - it will look something like this "bU6FKI".
+Copy the .env-sample file to .env and fill in the Typeform and Slack config parameters.
+
+# Obtaining the configuration parameters
+
+* The Typeform API Key is in the [My Account]](https://admin.typeform.com/account) section
+* The name of your Slack group is in the group's url
+* Either use an existing [legacy Slack API token](https://api.slack.com/custom-integrations/legacy-tokens), or, uhm... figure out how Slack authentication for the [Web API](https://api.slack.com/custom-integrations/web) now works (sorry)
+* Your Typeform ID can be obtained from the URL of the actual form - it will look something like this: "bU6FKI"
 
 Finally, you need to know the name of the email field in the Typeform JSON response. Create a URL like this:
 
 https://api.typeform.com/v0/form/TYPEFORM_ID?key=TYPEFORM_API_KEY&completed=true&limit=1
 
-Load it, and in the questions array find the form entry that asks for the user's email address. You need the id of the email field, it should look something like this "email_4202153".
+Load it, and in the questions array find the form entry that asks for the user's email address. You need the id of the email field, it should look something like this: "email_4202153".
 
-Initialise SlackForm like this:
+# Sending the actual invites
 
-````javascript
-var slackForm = new SlackForm({
-	typeformApiKey: '<TYPEFORM_API_KEY>',
-	typeformId: '<TYPEFORM_ID>',
-	typeformEmail: '<TYPEFORM_EMAIL_ID>',
-	slackChannel: '<SLACK_GROUP_NAME>',
-	slackToken: '<SLACK_TOKEN>'
-});
-````
+Simply set up a cronjob that runs 'node invite.js' on a regular basis.
 
-## Public Methods
+# TODO
 
-###Invite
-This method sends invites to all email addresses from Typeform submissions within the last hour. It returns an array of responses from each invite request. Set up a cron job to run the script every hour.
-
-````javascript
-slackForm.invite(function (err, data) {
-	if (err) {
-		throw err;
-	}
-
-	console.log(data);
-});
-````
+* Fix optional channel invites
