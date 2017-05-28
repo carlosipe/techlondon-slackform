@@ -1,5 +1,6 @@
-var request = require('request'),
-    Q       = require('q');
+var request        = require('request'),
+    Q              = require('q');
+const all_channels = require('./channels.js');
 
 function invite (channel, email, token, channels) {
 	var d = Q.defer();
@@ -28,6 +29,22 @@ function invite (channel, email, token, channels) {
 	});
 
 	return d.promise;
+}
+
+function generate_channel_list(data) {
+  var channel_list = process.env.DEFAULT_CHANNELS;
+
+  for(var answer in data.answers) {
+    if(answer.indexOf('list_JANI_choice') >= 0) {
+      channel_name = data.answers[answer].toLowerCase().replace(/\&/, 'and').replace(/ /g, '-');
+
+      if(all_channels[channel_name]) {
+        channel_list += `,${all_channels[channel_name]}`;
+      }
+    }
+  }
+
+  return channel_list;
 }
 
 var SlackForm = function (config) {
@@ -60,7 +77,9 @@ SlackForm.prototype.invite = function (callback) {
 		}
 
 		Q.all(data.responses.map(function (response) {
-			return invite(that.slackChannel, response.answers[that.typeformEmail], that.slackToken, that.channels);
+      // Do you need to declare the VAR here?
+      channels = generate_channel_list(response);
+			return invite(that.slackChannel, response.answers[that.typeformEmail], that.slackToken, channels);
 		})).then(function (data) {
 			callback(null, data);
 		});

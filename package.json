@@ -4,13 +4,14 @@
   "description": "",
   "main": "",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "channels": "node export_channels.js > channels.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "dotenv": "^4.0.0",
     "q": "^1.4.1",
-    "request": "^2.69.0"
+    "request": "^2.81.0"
   }
 }
